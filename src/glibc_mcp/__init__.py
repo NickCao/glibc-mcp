@@ -1,2 +1,9 @@
-def hello() -> str:
-    return "Hello from glibc-mcp!"
+from .impl import mcp
+
+
+def main():
+    mcp.run(transport="stdio")
+
+
+if __name__ == "__main__":
+    main()
