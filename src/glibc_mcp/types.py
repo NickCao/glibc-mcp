@@ -5,6 +5,7 @@ from ctypes import (
     c_ushort,
     c_ubyte,
     c_char,
+    c_char_p,
     c_int64,
     c_uint32,
     c_time_t,
@@ -127,3 +128,38 @@ class Stat:
         self.st_atim = Timespec(val.st_atim)
         self.st_mtim = Timespec(val.st_mtim)
         self.st_ctim = Timespec(val.st_ctim)
+
+
+class passwd(Structure):
+    _fields_ = [
+        ("pw_name", c_char_p),
+        ("pw_passwd", c_char_p),
+        ("pw_uid", uid_t),
+        ("pw_gid", gid_t),
+        ("pw_gecos", c_char_p),
+        ("pw_dir", c_char_p),
+        ("pw_shell", c_char_p),
+    ]
+
+
+passwd_p = POINTER(passwd)
+
+
+@dataclass
+class Passwd:
+    pw_name: str
+    pw_passwd: str
+    pw_uid: int
+    pw_gid: int
+    pw_gecos: str
+    pw_dir: str
+    pw_shell: str
+
+    def __init__(self, val: passwd):
+        self.pw_name = val.pw_name.decode()
+        self.pw_passwd = val.pw_passwd.decode()
+        self.pw_uid = val.pw_uid
+        self.pw_gid = val.pw_gid
+        self.pw_gecos = val.pw_gecos.decode()
+        self.pw_dir = val.pw_dir.decode()
+        self.pw_shell = val.pw_shell.decode()
