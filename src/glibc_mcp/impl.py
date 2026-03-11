@@ -49,5 +49,9 @@ def fdopendir(fd: int) -> c_uint64:
 
 
 @mcp.tool()
-def readdir(dirp: int) -> Dirent:
-    return Dirent(LIBC.readdir(cast(dirp, DIR_p)).contents)
+def readdir(dirp: int) -> Dirent | None:
+    p = LIBC.readdir(cast(dirp, DIR_p))
+    if p:
+        return Dirent(p.contents)
+    else:
+        return None
